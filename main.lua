@@ -331,6 +331,33 @@ function inSelectedBox(col,row)
     end
 end
 
+function getTime()
+    local secondsPassed = os.time() - startSecond
+    local timeStr = ""
+    local hours = math.floor(secondsPassed/60/60)
+    local minutes = math.floor((secondsPassed/60)%60)
+    local seconds = secondsPassed%60
+
+    if hours < 10 and hours ~= 0 then
+        hours = "0" .. hours
+    end
+
+    if minutes < 10 then
+        minutes = "0" .. minutes
+    end
+
+    if seconds < 10 then
+        seconds = "0" .. seconds
+    end
+
+    if tonumber(hours) > 0 then
+        timeStr = hours .. ":" .. minutes .. ":" .. seconds
+    else
+        timeStr = minutes .. ":" .. seconds
+    end
+    return timeStr
+end
+
 function love.draw()
     love.graphics.clear(216/255,240/255,255/255,1)
     if screen == "Main" then
@@ -376,6 +403,10 @@ function love.draw()
         love.graphics.setColor(75/255,75/255,125/255,1)
         love.graphics.setFont(nunitoTinyText)
         love.graphics.printf("Mistakes: " .. tostring(mistakes), info[1]+15, HEIGHT*0.145, info[3]/2-15, "center")
+        -- time
+        love.graphics.setColor(75/255,75/255,125/255,1)
+        love.graphics.setFont(nunitoTinyText)
+        love.graphics.printf("Time: " .. getTime(), info[1]-15+info[3]/2, HEIGHT*0.145, info[3]/2, "center")
         -- vertical lines
         love.graphics.setColor(0,0,0,1)
         love.graphics.rectangle("fill", info[1], info[2], 3, info[4])

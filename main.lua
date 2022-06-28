@@ -53,7 +53,6 @@ function splitString(inputString, separator)
     end
 end
 
-
 function pointInBox(point,x,y,width,height)
     return (point[1] > x and point[2] > y) and point[1] < (x+width) and point[2] < (y+height)
 end

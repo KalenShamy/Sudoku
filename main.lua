@@ -188,9 +188,8 @@ function setupBoard()
         sudokuSolution[row][column] = tonumber(num)
     end
 
-    for i=1, 9 do
-        numbers[tostring(i)] = true
-    end
+    numbers = {true,true,true,true,true,true,true,true,true}
+
     startSecond = os.time()
 
     return sudokuTable, sudokuSolution

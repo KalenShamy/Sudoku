@@ -384,8 +384,12 @@ function love.draw()
                         love.graphics.rectangle("line", info[1]+(info[3]*(column-1)/9), info[2]+(info[4]*(row-1)/9), info[3]/9, info[4]/9)
                         love.graphics.setColor(0,0,0,1)
                         if selectedSq[1] ~= nil then
-                            if (selectedSq[1] == column and selectedSq[2] == row) or val == board[selectedSq[1]][selectedSq[2]] then
+                            if (selectedSq[1] == column and selectedSq[2] == row) then
                                 love.graphics.setColor(0,0,0,0.35)
+                                love.graphics.rectangle("fill", info[1]+(info[3]*(column-1)/9), info[2]+(info[4]*(row-1)/9), info[3]/9, info[4]/9)
+                                love.graphics.setColor(0,0,0,1)
+                            elseif val == board[selectedSq[1]][selectedSq[2]] then
+                                love.graphics.setColor(0,0,0,0.25)
                                 love.graphics.rectangle("fill", info[1]+(info[3]*(column-1)/9), info[2]+(info[4]*(row-1)/9), info[3]/9, info[4]/9)
                                 love.graphics.setColor(0,0,0,1)
                             elseif selectedSq[1] == column or selectedSq[2] == row or inSelectedBox(column,row) then

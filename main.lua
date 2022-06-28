@@ -201,16 +201,16 @@ function updateNums()
     local currentMistakes_ = {}
     for column,vals in ipairs(board) do
         for row,val in ipairs(vals) do
-            if val ~= 0 and board[column][row] == boardSolution[column][row] then
+            if val ~= 0 and val == boardSolution[column][row] then
                 nCount[val] = nCount[val] + 1
                 if nCount[val] == 9 then
                     numbers[val] = false
                 end
             elseif val ~= 0 then
-                if currentMistakes[tostring(column) .. tostring(row)] ~= board[column][row] then
+                if currentMistakes[tostring(column) .. tostring(row)] ~= val then
                     mistakes = mistakes + 1
                 end
-                currentMistakes_[tostring(column) .. tostring(row)] = board[column][row]
+                currentMistakes_[tostring(column) .. tostring(row)] = val
             end
         end
     end

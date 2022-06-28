@@ -217,6 +217,18 @@ function updateNums()
     currentMistakes = currentMistakes_
 end
 
+function checkWin()
+    pass = true
+    for column,vals in ipairs(board) do
+        for row,val in ipairs(vals) do
+            if val ~= boardSolution[column][row] then
+                pass = false
+            end
+        end
+    end
+    return pass
+end
+
 function centeredInfo(x, y, width, height)
     return {x-(width/2),y-(height/2),width,height}
 end
@@ -269,6 +281,34 @@ function getTime()
     end
     return timeStr
 end
+
+function setModeColor(alpha)
+    if difficulty == "Easy" then
+        love.graphics.setColor(50/255,125/255,50/255,alpha)
+    elseif difficulty == "Medium" then
+        love.graphics.setColor(50/255,50/255,125/255,alpha)
+    else
+        love.graphics.setColor(125/255,50/255,50/255,alpha)
+    end
+end
+
+function resetGame()
+    screen = "Main" -- "Main" // "Game"
+    difficulty = "ERROR"
+    isPencil = false
+    selectedSq = {}
+    groups = {{11,12,13,21,22,23,31,32,33},{14,15,16,24,25,26,34,35,36},{17,18,19,27,28,29,37,38,39},{41,42,43,51,52,53,61,62,63},{44,45,46,54,55,56,64,65,66},{47,48,49,57,58,59,67,68,69},{71,72,73,81,82,83,91,92,93},{74,75,76,84,85,86,94,95,96},{77,78,79,87,88,89,97,98,99}}
+    board = {{},{},{},{},{},{},{},{},{}}
+    boardSolution = {{},{},{},{},{},{},{},{},{}}
+    startSecond = 0
+    mistakes = 0
+    currentMistakes = {}
+    gameEnd = 0
+    endScreen = 0
+    numbers = {true,true,true,true,true,true,true,true,true}
+    arrowPressed = false
+end
+
 function love.update(deltatime)
     if love.keyboard.isDown("escape") then
         love.event.quit()
@@ -292,7 +332,7 @@ function love.update(deltatime)
                 screen = "Game"
                 difficulty = "Hard"
             end
-        elseif screen == "Game" then
+        elseif screen == "Game" and gameEnd == 0 then
             local grid = centeredInfo(WIDTH*0.5,HEIGHT*0.5,HEIGHT*0.65,HEIGHT*0.65)
             local nums = centeredInfo(WIDTH*0.5,HEIGHT*0.917,HEIGHT*0.125*9,HEIGHT*0.125)
             if pointInBox({x,y}, grid[1], grid[2], grid[3], grid[4]) then
@@ -312,7 +352,7 @@ function love.update(deltatime)
             end
         end
     end
-    if screen == "Game" and selectedSq[1] ~= nil then
+    if screen == "Game" and selectedSq[1] ~= nil and gameEnd == 0 then
         for num, visible in ipairs(numbers) do
             if love.keyboard.isDown(tostring(num)) and board[selectedSq[1]][selectedSq[2]] ~= boardSolution[selectedSq[1]][selectedSq[2]] then
                 board[selectedSq[1]][selectedSq[2]] = num
@@ -322,7 +362,7 @@ function love.update(deltatime)
             board[selectedSq[1]][selectedSq[2]] = 0
         end
     end
-    if screen == "Game" then
+    if screen == "Game" and gameEnd == 0 and board[1][1] ~= nil then
         if arrowPressed ~= false then
             if not (love.keyboard.isDown("up") == false and love.keyboard.isDown("down") == false and love.keyboard.isDown("left") == false and love.keyboard.isDown("right") == false) then
                 -- arrows not pressed
@@ -356,11 +396,14 @@ function love.update(deltatime)
                 end
             end
         end
-    end
-    updateNums()
-end
-
+        updateNums()
+        if checkWin() == true then
+            gameEnd = os.time()
         end
+    elseif screen == "Game" and board[1][1] ~= nil and love.mouse.isDown(1) then
+        resetButton = centeredInfo(WIDTH*0.5,HEIGHT*0.75,WIDTH*0.45,HEIGHT*0.15)
+        if pointInBox({x,y}, resetButton[1], resetButton[2], resetButton[3], resetButton[4]) then
+            resetGame()
         end
     end
 end
@@ -485,6 +528,24 @@ function love.draw()
             if visible then
                 love.graphics.printf(tostring(num), info[1]+info[3]*(num-1)/9, info[2], info[3]/9, "center")
             end
+        end
+        if gameEnd ~= 0 then
+            if endScreen < 75 then
+                endScreen = endScreen + 1
+            end
+            setModeColor(endScreen/100)
+            love.graphics.rectangle("fill", 0, 0, WIDTH, HEIGHT)
+            love.graphics.setColor(1,1,1,endScreen/100)
+            love.graphics.setFont(nunitoTitle)
+            love.graphics.printf("Game Over", 0, HEIGHT*0.25-(HEIGHT*0.125/2), WIDTH, "center")
+            love.graphics.setFont(nunitoNumber)
+            love.graphics.printf("Time: " .. getTime(), 0, HEIGHT*0.45-(HEIGHT*0.055/2), WIDTH, "center")
+            love.graphics.printf("Mistakes: " .. mistakes, 0, HEIGHT*0.55-(HEIGHT*0.055/2), WIDTH, "center")
+            resetInfo = centeredInfo(WIDTH*0.5,HEIGHT*0.75,WIDTH*0.45,HEIGHT*0.15)
+            love.graphics.rectangle("fill", resetInfo[1], resetInfo[2], resetInfo[3], resetInfo[4])
+            setModeColor(endScreen/100)
+            love.graphics.setFont(nunitoButton)
+            love.graphics.printf("New Game", resetInfo[1], resetInfo[2], resetInfo[3], "center")
         end
     end
 end

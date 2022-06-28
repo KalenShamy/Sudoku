@@ -194,6 +194,20 @@ function setupBoard()
     return sudokuTable, sudokuSolution
 end
 
+function updateNums()
+    nCount = {0,0,0,0,0,0,0,0,0}
+    for column,vals in ipairs(board) do
+        for row,val in ipairs(vals) do
+            if val ~= 0 and board[column][row] == boardSolution[column][row] then
+                nCount[val] = nCount[val] + 1
+                if nCount[val] == 9 then
+                    numbers[val] = false
+                end
+            end
+        end
+    end
+end
+
 function love.update(deltatime)
     if love.keyboard.isDown("escape") then
         love.event.quit()
@@ -282,6 +296,7 @@ function love.update(deltatime)
             end
         end
     end
+    updateNums()
 end
 
 function centeredInfo(x, y, width, height)

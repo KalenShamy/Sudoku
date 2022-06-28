@@ -26,6 +26,8 @@ local boardSolution = {{},{},{},{},{},{},{},{},{}}
 local startSecond = 0
 local mistakes = 0
 local currentMistakes = {}
+local gameEnd = 0
+local endScreen = 0
 
 local numbers = {true,true,true,true,true,true,true,true,true}
 

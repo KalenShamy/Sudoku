@@ -4,7 +4,7 @@ local WIDTH, HEIGHT = love.window.getDesktopDimensions()
 
 function love.load()
     love.window.setMode(WIDTH, HEIGHT, {
-        fullscreen = false,
+        fullscreen = true,
         resizable = false,
         vsync = true
     })

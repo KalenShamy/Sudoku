@@ -475,68 +475,71 @@ function love.draw()
         love.graphics.printf("Sudoku", 0, HEIGHT*0.05-(HEIGHT*0.125)/2, WIDTH, "center")
         -- sudoku board
         love.graphics.setColor(1,1,1,1)
-        info = centeredInfo(WIDTH*0.5,HEIGHT*0.5,HEIGHT*0.65,HEIGHT*0.65)
-        love.graphics.rectangle("fill", info[1], info[2], info[3], info[4])
+        boardInfo = centeredInfo(WIDTH*0.5,HEIGHT*0.5,HEIGHT*0.65,HEIGHT*0.65)
+        love.graphics.rectangle("fill", boardInfo[1], boardInfo[2], boardInfo[3], boardInfo[4])
         -- mistakes
         love.graphics.setColor(75/255,75/255,125/255,1)
         love.graphics.setFont(nunitoTinyText)
-        love.graphics.printf("Mistakes: " .. tostring(mistakes), info[1]+15, HEIGHT*0.145, info[3]/2-15, "center")
+        love.graphics.printf("Mistakes: " .. tostring(mistakes), boardInfo[1]+15, HEIGHT*0.145, boardInfo[3]/2-15, "center")
         -- time
         love.graphics.setColor(75/255,75/255,125/255,1)
         love.graphics.setFont(nunitoTinyText)
-        love.graphics.printf("Time: " .. getTime(), info[1]-15+info[3]/2, HEIGHT*0.145, info[3]/2, "center")
+        love.graphics.printf("Time: " .. getTime(), boardInfo[1]-15+boardInfo[3]/2, HEIGHT*0.145, boardInfo[3]/2, "center")
         -- vertical lines
         love.graphics.setColor(0,0,0,1)
-        love.graphics.rectangle("fill", info[1], info[2], 3, info[4])
-        love.graphics.rectangle("fill", info[1]+HEIGHT*0.65/3, info[2], 3, info[4])
-        love.graphics.rectangle("fill", info[1]+HEIGHT*0.65*2/3, info[2], 3, info[4])
-        love.graphics.rectangle("fill", info[1]+HEIGHT*0.65, info[2], 3, info[4])
+        love.graphics.rectangle("fill", boardInfo[1], boardInfo[2], 3, boardInfo[4])
+        love.graphics.rectangle("fill", boardInfo[1]+HEIGHT*0.65/3, boardInfo[2], 3, boardInfo[4])
+        love.graphics.rectangle("fill", boardInfo[1]+HEIGHT*0.65*2/3, boardInfo[2], 3, boardInfo[4])
+        love.graphics.rectangle("fill", boardInfo[1]+HEIGHT*0.65, boardInfo[2], 3, boardInfo[4])
         -- horizontal lines
-        love.graphics.rectangle("fill", info[1], info[2], info[3], 3)
-        love.graphics.rectangle("fill", info[1], info[2]+HEIGHT*0.65/3, info[3], 3)
-        love.graphics.rectangle("fill", info[1], info[2]+HEIGHT*0.65*2/3, info[3], 3)
-        love.graphics.rectangle("fill", info[1], info[2]+HEIGHT*0.65, info[3], 3)
-        -- board
+        love.graphics.rectangle("fill", boardInfo[1], boardInfo[2], boardInfo[3], 3)
+        love.graphics.rectangle("fill", boardInfo[1], boardInfo[2]+HEIGHT*0.65/3, boardInfo[3], 3)
+        love.graphics.rectangle("fill", boardInfo[1], boardInfo[2]+HEIGHT*0.65*2/3, boardInfo[3], 3)
+        love.graphics.rectangle("fill", boardInfo[1], boardInfo[2]+HEIGHT*0.65, boardInfo[3], 3)
+        -- fill board
         if board[1][1] ~= nil then
-            info = centeredInfo(WIDTH*0.5,HEIGHT*0.5,HEIGHT*0.65,HEIGHT*0.65)
             for column,vals in ipairs(board) do
                 for row,val in ipairs(vals) do
+                    boxX = boardInfo[1]+(boardInfo[3]*(column-1)/9)
+                    boxY = boardInfo[2]+(boardInfo[4]*(row-1)/9)
+                    boxW = boardInfo[3]/9
+                    boxH = boardInfo[4]/9
                     if val ~= 0 then
                         love.graphics.setColor(0,0,0,1)
-                        love.graphics.rectangle("line", info[1]+(info[3]*(column-1)/9), info[2]+(info[4]*(row-1)/9), info[3]/9, info[4]/9)
+                        love.graphics.rectangle("line", boxX, boxY, boxW, boxH)
                         love.graphics.setColor(0,0,0,1)
                         if selectedSq[1] ~= nil then
                             if (selectedSq[1] == column and selectedSq[2] == row) then
                                 love.graphics.setColor(0,0,0,0.35)
-                                love.graphics.rectangle("fill", info[1]+(info[3]*(column-1)/9), info[2]+(info[4]*(row-1)/9), info[3]/9, info[4]/9)
+                                love.graphics.rectangle("fill", boxX, boxY, boxW, boxH)
                                 love.graphics.setColor(0,0,0,1)
                             elseif val == board[selectedSq[1]][selectedSq[2]] then
                                 love.graphics.setColor(0,0,0,0.25)
-                                love.graphics.rectangle("fill", info[1]+(info[3]*(column-1)/9), info[2]+(info[4]*(row-1)/9), info[3]/9, info[4]/9)
+                                love.graphics.rectangle("fill", boxX, boxY, boxW, boxH)
                                 love.graphics.setColor(0,0,0,1)
                             elseif selectedSq[1] == column or selectedSq[2] == row or inSelectedBox(column,row) then
                                 love.graphics.setColor(0,0,0,0.125)
-                                love.graphics.rectangle("fill", info[1]+(info[3]*(column-1)/9), info[2]+(info[4]*(row-1)/9), info[3]/9, info[4]/9)
+                                love.graphics.rectangle("fill", boxX, boxY, boxW, boxH)
                                 love.graphics.setColor(0,0,0,1)
                             end
                         end
                         if boardSolution[column][row] ~= val then
                             love.graphics.setColor(1,0,0,0.25)
-                            love.graphics.rectangle("fill", info[1]+(info[3]*(column-1)/9), info[2]+(info[4]*(row-1)/9), info[3]/9, info[4]/9)
+                            love.graphics.rectangle("fill", boxX, boxY, boxW, boxH)
                             love.graphics.setColor(1,0,0,1)
                         end
                         love.graphics.setFont(nunitoNumber)
-                        love.graphics.printf(val, info[1]+(info[3]*(column-1)/9), info[2]+(info[4]*(row-1)/9), info[3]/9, "center")
+                        love.graphics.printf(val, boxX, boxY, boxW, "center")
                     else
                         love.graphics.setColor(0,0,0,1)
-                        love.graphics.rectangle("line", info[1]+(info[3]*(column-1)/9), info[2]+(info[4]*(row-1)/9), info[3]/9, info[4]/9)
+                        love.graphics.rectangle("line", boxX, boxY, boxW, boxH)
                         if selectedSq[1] ~= nil then
                             if selectedSq[1] == column and selectedSq[2] == row then
                                 love.graphics.setColor(0,0,0,0.35)
-                                love.graphics.rectangle("fill", info[1]+(info[3]*(column-1)/9), info[2]+(info[4]*(row-1)/9), info[3]/9, info[4]/9)
+                                love.graphics.rectangle("fill", boxX, boxY, boxW, boxH)
                             elseif selectedSq[1] == column or selectedSq[2] == row or inSelectedBox(column,row) then
                                 love.graphics.setColor(0,0,0,0.125)
-                                love.graphics.rectangle("fill", info[1]+(info[3]*(column-1)/9), info[2]+(info[4]*(row-1)/9), info[3]/9, info[4]/9)
+                                love.graphics.rectangle("fill", boxX, boxY, boxW, boxH)
                                 love.graphics.setColor(0,0,0,1)
                             end
                         end

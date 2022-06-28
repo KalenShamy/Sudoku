@@ -348,15 +348,15 @@ function love.draw()
         love.graphics.rectangle("fill", info[1], info[2], info[3], info[4])
         -- vertical lines
         love.graphics.setColor(0,0,0,1)
-        love.graphics.rectangle("fill", info[1], info[2], 2, info[4])
-        love.graphics.rectangle("fill", info[1]+HEIGHT*0.65/3, info[2], 2, info[4])
-        love.graphics.rectangle("fill", info[1]+HEIGHT*0.65*2/3, info[2], 2, info[4])
-        love.graphics.rectangle("fill", info[1]+HEIGHT*0.65, info[2], 2, info[4])
+        love.graphics.rectangle("fill", info[1], info[2], 3, info[4])
+        love.graphics.rectangle("fill", info[1]+HEIGHT*0.65/3, info[2], 3, info[4])
+        love.graphics.rectangle("fill", info[1]+HEIGHT*0.65*2/3, info[2], 3, info[4])
+        love.graphics.rectangle("fill", info[1]+HEIGHT*0.65, info[2], 3, info[4])
         -- horizontal lines
-        love.graphics.rectangle("fill", info[1], info[2], info[3], 2)
-        love.graphics.rectangle("fill", info[1], info[2]+HEIGHT*0.65/3, info[3], 2)
-        love.graphics.rectangle("fill", info[1], info[2]+HEIGHT*0.65*2/3, info[3], 2)
-        love.graphics.rectangle("fill", info[1], info[2]+HEIGHT*0.65, info[3], 2)
+        love.graphics.rectangle("fill", info[1], info[2], info[3], 3)
+        love.graphics.rectangle("fill", info[1], info[2]+HEIGHT*0.65/3, info[3], 3)
+        love.graphics.rectangle("fill", info[1], info[2]+HEIGHT*0.65*2/3, info[3], 3)
+        love.graphics.rectangle("fill", info[1], info[2]+HEIGHT*0.65, info[3], 3)
         -- board
         if board[1][1] ~= nil then
             info = centeredInfo(WIDTH*0.5,HEIGHT*0.5,HEIGHT*0.65,HEIGHT*0.65)

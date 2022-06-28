@@ -229,7 +229,7 @@ function updateNums()
                 if nCount[val] == 9 then
                     numbers[val] = false
                 end
-            elseif val ~= 0 then
+            elseif val ~= 0 and val ~= boardSolution[column][row] then
                 if currentMistakes[tostring(column) .. tostring(row)] ~= val then
                     mistakes = mistakes + 1
                 end
@@ -266,11 +266,11 @@ function intInArray(array, int)
     return false
 end
 
-function inSelectedBox(col,row)
+function inSameBox(c1,r1,c2,r2)
     for _, group in ipairs(groups) do
-        isSelected = intInArray(group,tonumber(tostring(selectedSq[1])..tostring(selectedSq[2])))
-        if isSelected then
-            return intInArray(group,tonumber(tostring(col)..tostring(row)))
+        isGroup = intInArray(group,tonumber(tostring(c1)..tostring(r1)))
+        if isGroup then
+            return intInArray(group,tonumber(tostring(c2)..tostring(r2)))
         end
     end
 end
@@ -341,6 +341,15 @@ function insertNumber(number, column, row)
         end
     else
         board[column][row] = number
+        if board[column][row] == boardSolution[column][row] then
+            for c, vals in ipairs(pencilMarkings) do
+                for r, marks in ipairs(vals) do
+                    if c == column or r == row or inSameBox(c, r, column, row) then
+                        pencilMarkings[c][r][number] = false
+                    end
+                end
+            end
+        end
     end
 end
 
@@ -552,7 +561,7 @@ function love.draw()
                                 love.graphics.setColor(125/255,125/255,1,0.25)
                                 love.graphics.rectangle("fill", boxX, boxY, boxW, boxH)
                                 love.graphics.setColor(0,0,0,1)
-                            elseif selectedSq[1] == column or selectedSq[2] == row or inSelectedBox(column,row) then
+                            elseif selectedSq[1] == column or selectedSq[2] == row or inSameBox(selectedSq[1], selectedSq[2], column,row) then
                                 love.graphics.setColor(125/255,125/255,1,0.125)
                                 love.graphics.rectangle("fill", boxX, boxY, boxW, boxH)
                                 love.graphics.setColor(0,0,0,1)
@@ -572,7 +581,7 @@ function love.draw()
                             if selectedSq[1] == column and selectedSq[2] == row then
                                 love.graphics.setColor(125/255,125/255,1,0.35)
                                 love.graphics.rectangle("fill", boxX, boxY, boxW, boxH)
-                            elseif selectedSq[1] == column or selectedSq[2] == row or inSelectedBox(column,row) then
+                            elseif selectedSq[1] == column or selectedSq[2] == row or inSameBox(selectedSq[1], selectedSq[2], column,row) then
                                 love.graphics.setColor(125/255,125/255,1,0.125)
                                 love.graphics.rectangle("fill", boxX, boxY, boxW, boxH)
                                 love.graphics.setColor(0,0,0,1)

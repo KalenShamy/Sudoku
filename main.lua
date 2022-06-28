@@ -467,7 +467,6 @@ function love.draw()
         love.graphics.setColor(1,1,1,1)
         love.graphics.setFont(nunitoButton)
         love.graphics.printf("Hard", info[1], info[2], info[3], "center")
-    
     elseif screen == "Game" then
         -- sudoku title
         love.graphics.setColor(0,0,0,1)

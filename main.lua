@@ -35,6 +35,8 @@ local x, y = 0,0
 
 local arrowPressed = false
 
+local ESC_PRESSED = false
+
 function splitString(inputString, separator)
     if separator == "" then
         local table_ = {}
@@ -312,8 +314,23 @@ function resetGame()
 end
 
 function love.update(deltatime)
-    if love.keyboard.isDown("escape") then
+    if love.keyboard.isDown("escape") and (love.keyboard.isDown("lshift") or love.keyboard.isDown("rshift")) then
         love.event.quit()
+    elseif love.keyboard.isDown("escape") and ESC_PRESSED == false then
+        ESC_PRESSED = true
+        if screen == "Main" then
+            love.event.quit()
+        else
+            resetGame()
+        end
+    elseif ESC_PRESSED ~= false and not love.keyboard.isDown("escape") then
+        if ESC_PRESSED == true then
+            ESC_PRESSED = 10
+        elseif ESC_PRESSED > 0 then
+            ESC_PRESSED = ESC_PRESSED - deltatime*100
+        else
+            ESC_PRESSED = false
+        end
     end
     x, y = love.mouse.getPosition()
     if love.mouse.isDown(1) then

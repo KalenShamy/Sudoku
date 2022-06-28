@@ -5,8 +5,11 @@ local WIDTH, HEIGHT = love.window.getDesktopDimensions()
 local nunitoButton
 local nunitoTitle
 local nunitoNumber
+local nunitoPencil
 local nunitoNumButton
 local nunitoTinyText
+
+local pencilImage
 
 function love.load()
     love.window.setMode(WIDTH, HEIGHT, {
@@ -28,8 +31,10 @@ end
 local screen = "Main" -- "Main" // "Game"
 
 local difficulty = "ERROR"
+local isPencil = false
 local selectedSq = {}
 local groups = {{11,12,13,21,22,23,31,32,33},{14,15,16,24,25,26,34,35,36},{17,18,19,27,28,29,37,38,39},{41,42,43,51,52,53,61,62,63},{44,45,46,54,55,56,64,65,66},{47,48,49,57,58,59,67,68,69},{71,72,73,81,82,83,91,92,93},{74,75,76,84,85,86,94,95,96},{77,78,79,87,88,89,97,98,99}}
+local pencilOffsets = {{1,1},{2,1},{3,1},{1,2},{2,2},{3,2},{1,3},{2,3},{3,3}}
 local board = {{},{},{},{},{},{},{},{},{}}
 local boardSolution = {{},{},{},{},{},{},{},{},{}}
 local startSecond = 0
@@ -38,12 +43,13 @@ local currentMistakes = {}
 local gameEnd = 0
 local endScreen = 0
 
+local pencilMarkings = {{},{},{},{},{},{},{},{},{}}
 local numbers = {true,true,true,true,true,true,true,true,true}
 
 local x, y = 0,0
 
 local arrowPressed = false
-
+local pencil_down = false
 local ESC_PRESSED = false
 
 function splitString(inputString, separator)
@@ -70,6 +76,10 @@ end
 
 function pointInBox(point,x,y,width,height)
     return (point[1] > x and point[2] > y) and point[1] < (x+width) and point[2] < (y+height)
+end
+
+function pointInCircle(point,x,y,r)
+    return math.sqrt((point[1]-x)^2 + (point[2]-y)^2) <= r
 end
 
 function randomizeSudoku(sudoku)
@@ -322,6 +332,18 @@ function resetGame()
     arrowPressed = false
 end
 
+function insertNumber(number, column, row)
+    if isPencil then
+        if number ~= 0 and pencil_down == false then
+            board[column][row] = 0
+            pencilMarkings[column][row][number] = not pencilMarkings[column][row][number]
+            pencil_down = true
+        end
+    else
+        board[column][row] = number
+    end
+end
+
 function love.update(deltatime)
     if love.keyboard.isDown("escape") and (love.keyboard.isDown("lshift") or love.keyboard.isDown("rshift")) then
         love.event.quit()
@@ -373,7 +395,12 @@ function love.update(deltatime)
                 relX = x-nums[1]
                 num = math.floor(9*(relX/nums[3]))+1
                 if numbers[num] and board[selectedSq[1]][selectedSq[2]] ~= boardSolution[selectedSq[1]][selectedSq[2]] then
-                    board[selectedSq[1]][selectedSq[2]] = num
+                    insertNumber(num, selectedSq[1], selectedSq[2])
+                end
+            elseif pointInCircle({x,y}, boardInfo[1]-HEIGHT*0.1, boardInfo[2]+boardInfo[4]-HEIGHT*0.125/2, HEIGHT*0.125/2) then
+                if pencil_down == false then
+                    pencil_down = true
+                    isPencil = not isPencil
                 end
             else
                 selectedSq = {}
@@ -383,24 +410,33 @@ function love.update(deltatime)
     if screen == "Game" and selectedSq[1] ~= nil and gameEnd == 0 then
         for num, visible in ipairs(numbers) do
             if love.keyboard.isDown(tostring(num)) and board[selectedSq[1]][selectedSq[2]] ~= boardSolution[selectedSq[1]][selectedSq[2]] then
-                board[selectedSq[1]][selectedSq[2]] = num
+                insertNumber(num, selectedSq[1], selectedSq[2])
             end
         end
         if love.keyboard.isDown("backspace") and board[selectedSq[1]][selectedSq[2]] ~= 0 and board[selectedSq[1]][selectedSq[2]] ~= boardSolution[selectedSq[1]][selectedSq[2]] then
-            board[selectedSq[1]][selectedSq[2]] = 0
+            insertNumber(0, selectedSq[1], selectedSq[2])
         end
     end
     if screen == "Game" and gameEnd == 0 and board[1][1] ~= nil then
+        if love.keyboard.isDown("p") and pencil_down == false then
+            pencil_down = true
+            isPencil = not isPencil
+        elseif pencil_down ~= false then
+            if pencil_down == true then
+                pencil_down = 25
+            elseif pencil_down > 0 then
+                pencil_down = pencil_down - deltatime*100
+            else
+                pencil_down = false
+            end
+        end
         if arrowPressed ~= false then
-            if not (love.keyboard.isDown("up") == false and love.keyboard.isDown("down") == false and love.keyboard.isDown("left") == false and love.keyboard.isDown("right") == false) then
-                -- arrows not pressed
-                if arrowPressed == true then
-                    arrowPressed = 5
-                elseif arrowPressed > 0 then
-                    arrowPressed = arrowPressed - deltatime*100
-                else
-                    arrowPressed = false
-                end
+            if arrowPressed == true then
+                arrowPressed = 15
+            elseif arrowPressed > 0 then
+                arrowPressed = arrowPressed - deltatime*100
+            else
+                arrowPressed = false
             end
         else
             if selectedSq[1] == nil then
@@ -542,23 +578,47 @@ function love.draw()
                                 love.graphics.setColor(0,0,0,1)
                             end
                         end
+                        love.graphics.setColor(125/255,125/255,125/255,1)
+                        love.graphics.setFont(nunitoPencil)
+                        for n, visible in ipairs(pencilMarkings[column][row]) do
+                            if visible then
+                                love.graphics.printf(tostring(n),boxX+boxW*(pencilOffsets[n][1]-1)/3, boxY+boxH*(pencilOffsets[n][2]-1)/3, boxW/3, "center")
+                            end
+                        end
                     end
                 end
             end
         else
             board, boardSolution = setupBoard()
+            for column, vals in ipairs(board) do
+                for row, _ in ipairs(vals) do
+                    pencilMarkings[column][row] = {false,false,false,false,false,false,false,false,false}
+                end
+            end
         end
         -- numbers
         love.graphics.setColor(1,1,1,1)
         info = centeredInfo(WIDTH*0.5,HEIGHT*0.917,HEIGHT*0.125*9,HEIGHT*0.125)
         love.graphics.rectangle("fill", info[1], info[2], info[3], info[4])
         love.graphics.setColor(125/255,125/255,1,1)
+        if isPencil then
+            love.graphics.setColor(125/255,125/255,125/255,1)
+        end
         love.graphics.setFont(nunitoNumButton)
         for num, visible in ipairs(numbers) do
             if visible then
                 love.graphics.printf(tostring(num), info[1]+info[3]*(num-1)/9, info[2], info[3]/9, "center")
             end
         end
+        -- pencil button
+        love.graphics.setColor(125/255,125/255,1,1)
+        if isPencil then
+            love.graphics.setColor(125/255,125/255,125/255,1)
+        end
+        love.graphics.circle("fill", boardInfo[1]-HEIGHT*0.1,boardInfo[2]+boardInfo[4]-HEIGHT*0.125/2,HEIGHT*0.125/2)
+        love.graphics.setColor(1,1,1,1)
+        love.graphics.draw(pencilImage, boardInfo[1]-HEIGHT*0.1-HEIGHT*0.125/2,boardInfo[2]+boardInfo[4]-HEIGHT*0.125,0,HEIGHT*0.125/pencilImage:getWidth())
+        -- end screen
         if gameEnd ~= 0 then
             if endScreen < 75 then
                 endScreen = endScreen + 1

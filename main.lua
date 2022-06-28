@@ -229,7 +229,7 @@ function love.update(deltatime)
             elseif selectedSq[1] ~= nil and pointInBox({x,y}, numbers[1], numbers[2], numbers[3], numbers[4]) then
                 relX = x-numbers[1]
                 num = math.floor(9*(relX/numbers[3]))+1
-                if numebers[num] then
+                if numbers[num] and board[selectedSq[1]][selectedSq[2]] ~= boardSolution[selectedSq[1]][selectedSq[2]] then
                     board[selectedSq[1]][selectedSq[2]] = num
                 end
             else
@@ -239,10 +239,14 @@ function love.update(deltatime)
     end
     if screen == "Game" and selectedSq[1] ~= nil then
         for num, visible in ipairs(numbers) do
-            if love.keyboard.isDown(tostring(num)) then
+            if love.keyboard.isDown(tostring(num)) and board[selectedSq[1]][selectedSq[2]] ~= boardSolution[selectedSq[1]][selectedSq[2]] then
                 board[selectedSq[1]][selectedSq[2]] = num
             end
         end
+        if love.keyboard.isDown("backspace") and board[selectedSq[1]][selectedSq[2]] ~= 0 and board[selectedSq[1]][selectedSq[2]] ~= boardSolution[selectedSq[1]][selectedSq[2]] then
+            board[selectedSq[1]][selectedSq[2]] = 0
+        end
+    end
     if screen == "Game" then
         if arrowPressed ~= false then
             if not (love.keyboard.isDown("up") == false and love.keyboard.isDown("down") == false and love.keyboard.isDown("left") == false and love.keyboard.isDown("right") == false) then

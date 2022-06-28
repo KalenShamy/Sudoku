@@ -219,16 +219,16 @@ function love.update(deltatime)
             end
         elseif screen == "Game" then
             local grid = centeredInfo(WIDTH*0.5,HEIGHT*0.5,HEIGHT*0.65,HEIGHT*0.65)
-            local numbers = centeredInfo(WIDTH*0.5,HEIGHT*0.917,HEIGHT*0.125*9,HEIGHT*0.125)
+            local nums = centeredInfo(WIDTH*0.5,HEIGHT*0.917,HEIGHT*0.125*9,HEIGHT*0.125)
             if pointInBox({x,y}, grid[1], grid[2], grid[3], grid[4]) then
                 relX = x-grid[1]
                 relY = y-grid[2]
                 col = math.floor(9*(relX/grid[3]))+1
                 row = math.floor(9*(relY/grid[3]))+1
                 selectedSq = {col,row}
-            elseif selectedSq[1] ~= nil and pointInBox({x,y}, numbers[1], numbers[2], numbers[3], numbers[4]) then
-                relX = x-numbers[1]
-                num = math.floor(9*(relX/numbers[3]))+1
+            elseif selectedSq[1] ~= nil and pointInBox({x,y}, nums[1], nums[2], nums[3], nums[4]) then
+                relX = x-nums[1]
+                num = math.floor(9*(relX/nums[3]))+1
                 if numbers[num] and board[selectedSq[1]][selectedSq[2]] ~= boardSolution[selectedSq[1]][selectedSq[2]] then
                     board[selectedSq[1]][selectedSq[2]] = num
                 end

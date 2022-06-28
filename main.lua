@@ -374,7 +374,7 @@ function love.update(deltatime)
     end
     x, y = love.mouse.getPosition()
     if love.mouse.isDown(1) then
-        if screen == "Main" then
+        if screen == "Main" and ESC_PRESSED == false then
             easy = centeredInfo(WIDTH*0.5,HEIGHT*0.35,WIDTH*0.45,HEIGHT*0.15)
             medium = centeredInfo(WIDTH*0.5,HEIGHT*0.55,WIDTH*0.45,HEIGHT*0.15)
             hard = centeredInfo(WIDTH*0.5,HEIGHT*0.75,WIDTH*0.45,HEIGHT*0.15)
@@ -477,6 +477,7 @@ function love.update(deltatime)
         resetButton = centeredInfo(WIDTH*0.5,HEIGHT*0.75,WIDTH*0.45,HEIGHT*0.15)
         if pointInBox({x,y}, resetButton[1], resetButton[2], resetButton[3], resetButton[4]) then
             resetGame()
+            ESC_PRESSED = true
         end
     end
 end

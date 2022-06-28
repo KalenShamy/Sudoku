@@ -217,6 +217,58 @@ function updateNums()
     currentMistakes = currentMistakes_
 end
 
+function centeredInfo(x, y, width, height)
+    return {x-(width/2),y-(height/2),width,height}
+end
+
+function intInArray(array, int)
+    for i, num in ipairs(array) do
+        if num == int then
+            return i
+        end
+    end
+
+    return false
+end
+
+function inSelectedBox(col,row)
+    for _, group in ipairs(groups) do
+        isSelected = intInArray(group,tonumber(tostring(selectedSq[1])..tostring(selectedSq[2])))
+        if isSelected then
+            return intInArray(group,tonumber(tostring(col)..tostring(row)))
+        end
+    end
+end
+
+function getTime()
+    local secondsPassed = os.time() - startSecond
+    if gameEnd ~= 0 then
+        secondsPassed = gameEnd - startSecond
+    end
+    local timeStr = ""
+    local hours = math.floor(secondsPassed/60/60)
+    local minutes = math.floor((secondsPassed/60)%60)
+    local seconds = secondsPassed%60
+
+    if hours < 10 and hours ~= 0 then
+        hours = "0" .. hours
+    end
+
+    if minutes < 10 then
+        minutes = "0" .. minutes
+    end
+
+    if seconds < 10 then
+        seconds = "0" .. seconds
+    end
+
+    if tonumber(hours) > 0 then
+        timeStr = hours .. ":" .. minutes .. ":" .. seconds
+    else
+        timeStr = minutes .. ":" .. seconds
+    end
+    return timeStr
+end
 function love.update(deltatime)
     if love.keyboard.isDown("escape") then
         love.event.quit()
@@ -308,54 +360,9 @@ function love.update(deltatime)
     updateNums()
 end
 
-function centeredInfo(x, y, width, height)
-    return {x-(width/2),y-(height/2),width,height}
-end
-
-function intInArray(array, int)
-    for i, num in ipairs(array) do
-        if num == int then
-            return i
+        end
         end
     end
-
-    return false
-end
-
-function inSelectedBox(col,row)
-    for _, group in ipairs(groups) do
-        isSelected = intInArray(group,tonumber(tostring(selectedSq[1])..tostring(selectedSq[2])))
-        if isSelected then
-            return intInArray(group,tonumber(tostring(col)..tostring(row)))
-        end
-    end
-end
-
-function getTime()
-    local secondsPassed = os.time() - startSecond
-    local timeStr = ""
-    local hours = math.floor(secondsPassed/60/60)
-    local minutes = math.floor((secondsPassed/60)%60)
-    local seconds = secondsPassed%60
-
-    if hours < 10 and hours ~= 0 then
-        hours = "0" .. hours
-    end
-
-    if minutes < 10 then
-        minutes = "0" .. minutes
-    end
-
-    if seconds < 10 then
-        seconds = "0" .. seconds
-    end
-
-    if tonumber(hours) > 0 then
-        timeStr = hours .. ":" .. minutes .. ":" .. seconds
-    else
-        timeStr = minutes .. ":" .. seconds
-    end
-    return timeStr
 end
 
 function love.draw()

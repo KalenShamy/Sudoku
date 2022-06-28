@@ -2,19 +2,28 @@ local sudokus = require("sudokus")
 
 local WIDTH, HEIGHT = love.window.getDesktopDimensions()
 
+local nunitoButton
+local nunitoTitle
+local nunitoNumber
+local nunitoNumButton
+local nunitoTinyText
+
 function love.load()
     love.window.setMode(WIDTH, HEIGHT, {
         fullscreen = true,
         resizable = false,
         vsync = true
     })
-end
 
-local nunitoButton = love.graphics.newFont("nunito.ttf",HEIGHT*0.1)
-local nunitoTitle = love.graphics.newFont("nunito.ttf",HEIGHT*0.125)
-local nunitoNumber = love.graphics.newFont("nunito.ttf",HEIGHT*0.055)
-local nunitoNumButton = love.graphics.newFont("nunito.ttf",HEIGHT*0.09)
-local nunitoTinyText = love.graphics.newFont("nunito.ttf",HEIGHT*0.02)
+    pencilImage = love.graphics.newImage("pencil.png")
+
+    nunitoButton = love.graphics.newFont("nunito.ttf",HEIGHT*0.1)
+    nunitoTitle = love.graphics.newFont("nunito.ttf",HEIGHT*0.125)
+    nunitoNumber = love.graphics.newFont("nunito.ttf",HEIGHT*0.055)
+    nunitoPencil = love.graphics.newFont("nunito.ttf",HEIGHT*0.055/3)
+    nunitoNumButton = love.graphics.newFont("nunito.ttf",HEIGHT*0.09)
+    nunitoTinyText = love.graphics.newFont("nunito.ttf",HEIGHT*0.02)
+end
 
 local screen = "Main" -- "Main" // "Game"
 

@@ -510,15 +510,15 @@ function love.draw()
                         love.graphics.setColor(0,0,0,1)
                         if selectedSq[1] ~= nil then
                             if (selectedSq[1] == column and selectedSq[2] == row) then
-                                love.graphics.setColor(0,0,0,0.35)
+                                love.graphics.setColor(125/255,125/255,1,0.35)
                                 love.graphics.rectangle("fill", boxX, boxY, boxW, boxH)
                                 love.graphics.setColor(0,0,0,1)
                             elseif val == board[selectedSq[1]][selectedSq[2]] then
-                                love.graphics.setColor(0,0,0,0.25)
+                                love.graphics.setColor(125/255,125/255,1,0.25)
                                 love.graphics.rectangle("fill", boxX, boxY, boxW, boxH)
                                 love.graphics.setColor(0,0,0,1)
                             elseif selectedSq[1] == column or selectedSq[2] == row or inSelectedBox(column,row) then
-                                love.graphics.setColor(0,0,0,0.125)
+                                love.graphics.setColor(125/255,125/255,1,0.125)
                                 love.graphics.rectangle("fill", boxX, boxY, boxW, boxH)
                                 love.graphics.setColor(0,0,0,1)
                             end
@@ -535,10 +535,10 @@ function love.draw()
                         love.graphics.rectangle("line", boxX, boxY, boxW, boxH)
                         if selectedSq[1] ~= nil then
                             if selectedSq[1] == column and selectedSq[2] == row then
-                                love.graphics.setColor(0,0,0,0.35)
+                                love.graphics.setColor(125/255,125/255,1,0.35)
                                 love.graphics.rectangle("fill", boxX, boxY, boxW, boxH)
                             elseif selectedSq[1] == column or selectedSq[2] == row or inSelectedBox(column,row) then
-                                love.graphics.setColor(0,0,0,0.125)
+                                love.graphics.setColor(125/255,125/255,1,0.125)
                                 love.graphics.rectangle("fill", boxX, boxY, boxW, boxH)
                                 love.graphics.setColor(0,0,0,1)
                             end
@@ -553,7 +553,7 @@ function love.draw()
         love.graphics.setColor(1,1,1,1)
         info = centeredInfo(WIDTH*0.5,HEIGHT*0.917,HEIGHT*0.125*9,HEIGHT*0.125)
         love.graphics.rectangle("fill", info[1], info[2], info[3], info[4])
-        love.graphics.setColor(100/255,100/255,1,1)
+        love.graphics.setColor(125/255,125/255,1,1)
         love.graphics.setFont(nunitoNumButton)
         for num, visible in ipairs(numbers) do
             if visible then

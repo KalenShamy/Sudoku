@@ -29,6 +29,8 @@ local numbers = {true,true,true,true,true,true,true,true,true}
 
 local x, y = 0,0
 
+local arrowPressed = false
+
 function splitString(inputString, separator)
     if separator == "" then
         local table_ = {}
@@ -241,6 +243,40 @@ function love.update(deltatime)
         for num, visible in ipairs(numbers) do
             if love.keyboard.isDown(tostring(num)) then
                 board[selectedSq[1]][selectedSq[2]] = num
+            end
+        end
+    if screen == "Game" then
+        if arrowPressed ~= false then
+            if not (love.keyboard.isDown("up") == false and love.keyboard.isDown("down") == false and love.keyboard.isDown("left") == false and love.keyboard.isDown("right") == false) then
+                -- arrows not pressed
+                if arrowPressed == true then
+                    arrowPressed = 5
+                elseif arrowPressed > 0 then
+                    arrowPressed = arrowPressed - deltatime*100
+                else
+                    arrowPressed = false
+                end
+            end
+        else
+            if selectedSq[1] == nil then
+                selectedSq = {1,1}
+            else
+                if love.keyboard.isDown("up") and selectedSq[2] > 1 then
+                    arrowPressed = true
+                    selectedSq = {selectedSq[1], selectedSq[2]-1}
+                end
+                if love.keyboard.isDown("down") and selectedSq[2] < 9 then
+                    arrowPressed = true
+                    selectedSq = {selectedSq[1], selectedSq[2]+1}
+                end
+                if love.keyboard.isDown("left") and selectedSq[1] > 1 then
+                    arrowPressed = true
+                    selectedSq = {selectedSq[1]-1, selectedSq[2]}
+                end
+                if love.keyboard.isDown("right") and selectedSq[1] < 9 then
+                    arrowPressed = true
+                    selectedSq = {selectedSq[1]+1, selectedSq[2]}
+                end
             end
         end
     end

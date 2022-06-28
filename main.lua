@@ -14,6 +14,7 @@ local nunitoButton = love.graphics.newFont("nunito.ttf",HEIGHT*0.1)
 local nunitoTitle = love.graphics.newFont("nunito.ttf",HEIGHT*0.125)
 local nunitoNumber = love.graphics.newFont("nunito.ttf",HEIGHT*0.055)
 local nunitoNumButton = love.graphics.newFont("nunito.ttf",HEIGHT*0.09)
+local nunitoTinyText = love.graphics.newFont("nunito.ttf",HEIGHT*0.02)
 
 local screen = "Main" -- "Main" // "Game"
 
@@ -24,6 +25,7 @@ local board = {{},{},{},{},{},{},{},{},{}}
 local boardSolution = {{},{},{},{},{},{},{},{},{}}
 local startSecond = 0
 local mistakes = 0
+local currentMistakes = {}
 
 local numbers = {true,true,true,true,true,true,true,true,true}
 
@@ -196,6 +198,7 @@ end
 
 function updateNums()
     nCount = {0,0,0,0,0,0,0,0,0}
+    local currentMistakes_ = {}
     for column,vals in ipairs(board) do
         for row,val in ipairs(vals) do
             if val ~= 0 and board[column][row] == boardSolution[column][row] then
@@ -203,9 +206,15 @@ function updateNums()
                 if nCount[val] == 9 then
                     numbers[val] = false
                 end
+            elseif val ~= 0 then
+                if currentMistakes[tostring(column) .. tostring(row)] ~= board[column][row] then
+                    mistakes = mistakes + 1
+                end
+                currentMistakes_[tostring(column) .. tostring(row)] = board[column][row]
             end
         end
     end
+    currentMistakes = currentMistakes_
 end
 
 function love.update(deltatime)
@@ -363,6 +372,10 @@ function love.draw()
         love.graphics.setColor(1,1,1,1)
         info = centeredInfo(WIDTH*0.5,HEIGHT*0.5,HEIGHT*0.65,HEIGHT*0.65)
         love.graphics.rectangle("fill", info[1], info[2], info[3], info[4])
+        -- mistakes
+        love.graphics.setColor(75/255,75/255,125/255,1)
+        love.graphics.setFont(nunitoTinyText)
+        love.graphics.printf("Mistakes: " .. tostring(mistakes), info[1]+15, HEIGHT*0.145, info[3]/2-15, "center")
         -- vertical lines
         love.graphics.setColor(0,0,0,1)
         love.graphics.rectangle("fill", info[1], info[2], 3, info[4])

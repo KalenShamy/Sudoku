@@ -24,6 +24,7 @@ function love.load()
     nunitoTitle = love.graphics.newFont("nunito.ttf",HEIGHT*0.125)
     nunitoNumber = love.graphics.newFont("nunito.ttf",HEIGHT*0.055)
     nunitoPencil = love.graphics.newFont("nunito.ttf",HEIGHT*0.055/3)
+    nunitoPencilBold = love.graphics.newFont("nunito_bold.ttf",HEIGHT*0.055/3)
     nunitoNumButton = love.graphics.newFont("nunito.ttf",HEIGHT*0.09)
     nunitoTinyText = love.graphics.newFont("nunito.ttf",HEIGHT*0.02)
 end
@@ -588,8 +589,11 @@ function love.draw()
                             end
                         end
                         love.graphics.setColor(125/255,125/255,125/255,1)
-                        love.graphics.setFont(nunitoPencil)
                         for n, visible in ipairs(pencilMarkings[column][row]) do
+                            love.graphics.setFont(nunitoPencil)
+                            if board[selectedSq[1]][selectedSq[2]] == n then
+                                love.graphics.setFont(nunitoPencilBold)
+                            end
                             if visible then
                                 love.graphics.printf(tostring(n),boxX+boxW*(pencilOffsets[n][1]-1)/3, boxY+boxH*(pencilOffsets[n][2]-1)/3, boxW/3, "center")
                             end

@@ -585,7 +585,6 @@ function love.draw()
                             elseif selectedSq[1] == column or selectedSq[2] == row or inSameBox(selectedSq[1], selectedSq[2], column,row) then
                                 love.graphics.setColor(125/255,125/255,1,0.125)
                                 love.graphics.rectangle("fill", boxX, boxY, boxW, boxH)
-                                love.graphics.setColor(0,0,0,1)
                             end
                         end
                         love.graphics.setColor(125/255,125/255,125/255,1)

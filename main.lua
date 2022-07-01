@@ -449,7 +449,7 @@ function love.update(deltatime)
                 arrowPressed = false
             end
         else
-            if selectedSq[1] == nil then
+            if selectedSq[1] == nil and (love.keyboard.isDown("up") or love.keyboard.isDown("down") or love.keyboard.isDown("left") or love.keyboard.isDown("right")) then
                 selectedSq = {1,1}
             else
                 if love.keyboard.isDown("up") and selectedSq[2] > 1 then
@@ -587,15 +587,15 @@ function love.draw()
                                 love.graphics.setColor(125/255,125/255,1,0.125)
                                 love.graphics.rectangle("fill", boxX, boxY, boxW, boxH)
                             end
-                        end
-                        love.graphics.setColor(125/255,125/255,125/255,1)
-                        for n, visible in ipairs(pencilMarkings[column][row]) do
-                            love.graphics.setFont(nunitoPencil)
-                            if board[selectedSq[1]][selectedSq[2]] == n then
-                                love.graphics.setFont(nunitoPencilBold)
-                            end
-                            if visible then
-                                love.graphics.printf(tostring(n),boxX+boxW*(pencilOffsets[n][1]-1)/3, boxY+boxH*(pencilOffsets[n][2]-1)/3, boxW/3, "center")
+                            love.graphics.setColor(125/255,125/255,125/255,1)
+                            for n, visible in ipairs(pencilMarkings[column][row]) do
+                                love.graphics.setFont(nunitoPencil)
+                                if board[selectedSq[1]][selectedSq[2]] == n then
+                                    love.graphics.setFont(nunitoPencilBold)
+                                end
+                                if visible then
+                                    love.graphics.printf(tostring(n),boxX+boxW*(pencilOffsets[n][1]-1)/3, boxY+boxH*(pencilOffsets[n][2]-1)/3, boxW/3, "center")
+                                end
                             end
                         end
                     end

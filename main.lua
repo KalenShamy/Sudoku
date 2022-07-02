@@ -20,7 +20,7 @@ function love.load()
 
     pencilImage = love.graphics.newImage("pencil.png")
 
-    nunitoButton = love.graphics.newFont("nunito.ttf",HEIGHT*0.1)
+    nunitoButton = love.graphics.newFont("nunito.ttf",HEIGHT*0.1125)
     nunitoTitle = love.graphics.newFont("nunito.ttf",HEIGHT*0.125)
     nunitoNumber = love.graphics.newFont("nunito.ttf",HEIGHT*0.055)
     nunitoPencil = love.graphics.newFont("nunito.ttf",HEIGHT*0.055/3)

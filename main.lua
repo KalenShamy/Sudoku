@@ -587,15 +587,15 @@ function love.draw()
                                 love.graphics.setColor(125/255,125/255,1,0.125)
                                 love.graphics.rectangle("fill", boxX, boxY, boxW, boxH)
                             end
-                            love.graphics.setColor(125/255,125/255,125/255,1)
-                            for n, visible in ipairs(pencilMarkings[column][row]) do
-                                love.graphics.setFont(nunitoPencil)
-                                if board[selectedSq[1]][selectedSq[2]] == n then
-                                    love.graphics.setFont(nunitoPencilBold)
-                                end
-                                if visible then
-                                    love.graphics.printf(tostring(n),boxX+boxW*(pencilOffsets[n][1]-1)/3, boxY+boxH*(pencilOffsets[n][2]-1)/3, boxW/3, "center")
-                                end
+                        end
+                        love.graphics.setColor(125/255,125/255,125/255,1)
+                        for n, visible in ipairs(pencilMarkings[column][row]) do
+                            love.graphics.setFont(nunitoPencil)
+                            if selectedSq[1] ~= nil and board[selectedSq[1]][selectedSq[2]] == n then
+                                love.graphics.setFont(nunitoPencilBold)
+                            end
+                            if visible then
+                                love.graphics.printf(tostring(n),boxX+boxW*(pencilOffsets[n][1]-1)/3, boxY+boxH*(pencilOffsets[n][2]-1)/3, boxW/3, "center")
                             end
                         end
                     end

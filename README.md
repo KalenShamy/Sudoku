@@ -24,3 +24,11 @@ To test and play this game, you must install [LÖVE](https://love2d.org/). If yo
 - A completed game of Easy difficulty
 
   <img width="750" alt="A completed game of Easy difficulty" src="https://user-images.githubusercontent.com/87545752/176326399-bda6802d-cece-46a6-9e9a-ff2e88129e75.png">
+
+- A completed game of Medium difficulty
+
+  <img width="750" alt="A completed game of Medium difficulty" src="https://user-images.githubusercontent.com/87545752/177008276-5c6ce574-2ac3-4fda-aa2f-15748fdf8649.png">
+
+- A completed game of Hard difficulty
+
+  <img width="750" alt="A completed game of Hard difficulty" src="https://user-images.githubusercontent.com/87545752/177008278-7230459a-363c-44bc-8b28-a91b0c8c0cf8.png">

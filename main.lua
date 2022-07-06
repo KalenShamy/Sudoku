@@ -340,7 +340,7 @@ function insertNumber(number, column, row)
             pencilMarkings[column][row][number] = not pencilMarkings[column][row][number]
             pencil_down = true
         end
-    else
+    elseif number == 0 or numbers[number] then
         board[column][row] = number
         if board[column][row] == boardSolution[column][row] then
             for c, vals in ipairs(pencilMarkings) do
@@ -404,7 +404,7 @@ function love.update(deltatime)
             elseif selectedSq[1] ~= nil and pointInBox({x,y}, nums[1], nums[2], nums[3], nums[4]) then
                 relX = x-nums[1]
                 num = math.floor(9*(relX/nums[3]))+1
-                if numbers[num] and board[selectedSq[1]][selectedSq[2]] ~= boardSolution[selectedSq[1]][selectedSq[2]] then
+                if (numbers[num] or isPencil) and board[selectedSq[1]][selectedSq[2]] ~= boardSolution[selectedSq[1]][selectedSq[2]] then
                     insertNumber(num, selectedSq[1], selectedSq[2])
                 end
             elseif pointInCircle({x,y}, boardInfo[1]-HEIGHT*0.1, boardInfo[2]+boardInfo[4]-HEIGHT*0.125/2, HEIGHT*0.125/2) then
@@ -619,7 +619,7 @@ function love.draw()
         end
         love.graphics.setFont(nunitoNumButton)
         for num, visible in ipairs(numbers) do
-            if visible then
+            if visible or isPencil then
                 love.graphics.printf(tostring(num), info[1]+info[3]*(num-1)/9, info[2], info[3]/9, "center")
             end
         end

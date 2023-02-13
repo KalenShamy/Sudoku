@@ -3,7 +3,9 @@ Final project submission for the [Harvard CS50x course](https://cs50.harvard.edu
 
 ---
 
-To test and play this game, you must install [LÖVE](https://love2d.org/). If you aren't able to do so, here are some screenshots!
+To test and play this game, you must install [LÖVE](https://love2d.org/), then run the `Game.love` file.
+
+Some screenshots if you're interested:
 
 - Main Screen
 
